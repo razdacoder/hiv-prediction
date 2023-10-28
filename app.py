@@ -25,12 +25,25 @@ hiv_test_past_year = st.radio("HIV Test in the Past Year", ["Yes", "No"])
 # Make predictions
 if st.button("Predict HIV Status"):
    
-    input_data = np.array([age, marital_status, std, education, hiv_test_past_year, aids_education, sex_partner_places, sexual_orientation, drug_taking])
-    input_data = input_data.reshape(1, -1)
+    input_data = pd.DataFrame({
+        'Age': [age],
+        'Marital Staus': [marital_status],
+        'STD': [std],
+        'Educational Background': [education],
+        'HIV TEST IN PAST YEAR': [hiv_test_past_year],
+        'AIDS education': [aids_education],
+        'Places of seeking sex partners': [sex_partner_places],
+        'SEXUAL ORIENTATION': [sexual_orientation],
+        'Drug- taking': [drug_taking]
+    }) 
     transformed_data = processor.transform(input_data)
     prediction = model.predict(transformed_data)
 
-    st.write(f"Predicted HIV Status: {'Positive' if prediction[0] == 1 else 'Negative'}")
+    if prediction[0] == 0:
+        st.success("The Predicted HIV Status for the above profile is Negative")
+    else:
+        st.error("The Predicted HIV Status for the above profile is Positive")
+    # st.write(f"Predicted HIV Status: {'Positive' if prediction[0] == 1 else 'Negative'}")
 
 # You can add more features to display the model's confidence or other information.
 
